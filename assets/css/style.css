@@ -34,29 +34,6 @@ body {
     height:90%;
 }
 
-.draggable{
-    box-shadow: 0 10px 15px rgba(255, 255, 255, 0.3);
-    transition: box-shadow 0.5s ease;
-}
-
-.draggable:hover{
-    box-shadow: 0 10px 15px rgba(255, 255, 255, 0.7);
-}
-
-
-#rotate-area {
-    height: 100%;
-    padding: 1rem;
-    overflow: hidden;
-    touch-action: none;
-  }
-  
-  #rotate-area svg {
-    display: block;
-    margin: auto;
-    width: 100%;
-    height: 100%;
-  }
 
 
   #scale-element {
@@ -64,8 +41,4 @@ body {
     max-width: 100%;
     margin: 1rem auto;
     touch-action: none;
-  }
-  
-  #scale-element.reset {
-    transition: transform 0.3s ease-in-out;
   }
