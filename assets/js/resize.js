@@ -1,5 +1,5 @@
 document.querySelectorAll('.gesture-area').forEach((gestureArea) => {
-  const scaleElement = gestureArea.querySelector('.scale-element .draggable-item');
+  const scaleElement = gestureArea.querySelector('.scale-element');
   const transformState = {
       angle: 0,
       scale: 1,
