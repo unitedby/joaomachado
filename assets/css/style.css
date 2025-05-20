@@ -34,6 +34,10 @@ body {
     height:90%;
 }
 
+.poster svg{
+    position: absolute;
+}
+
 
 
 .scale-element {

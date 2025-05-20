@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1927.6 2778">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: url(#linear-gradient);
+      }
+    </style>
+    <linearGradient id="linear-gradient" x1="2695.75" y1="2761.05" x2="2680.95" y2="1909.04" gradientTransform="translate(-1692 4362) scale(1 -1)" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0db14b"/>
+      <stop offset=".9" stop-color="#000"/>
+      <stop offset="1" stop-color="#000"/>
+    </linearGradient>
+  </defs>
+  <path id="camada14" class="cls-1" d="M461.8,1610.2h1074.5v522.1c-15.9-15.4-40.6-18.9-80-18.8-16.7,0-30.1-12.3-49.2-14.7-19-2.3-63.2,4.7-80.2,2.3-17-2.3-36-23.7-53-31.6-17-7.9-57.6-9.1-79-14.6-21.4-5.6-55.4-33.4-61.1-41.8-7.7-11.3-24.6-13.4-33.7-17-14.7-5.9-97.5-66.1-97.5-66.1l-41,.2s120.3,86.4,131.7,98.7c11.4,12.3,5.6,55.3,17.9,68.8s35.1,48.6,31.6,67.9c-3.5,19.3-54.1,63.2-64.4,80.2-10.2,17-10,32.5-12.3,50.6s-32.8,46.2-45.1,56.5c-12.3,10.2-15.8,35.1-18.1,47.4-2.3,11.9-28.8,37.9-38.6,43.5h-502.5v-833.6Z"/>
+</svg>
