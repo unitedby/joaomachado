@@ -1,78 +1,60 @@
-document.querySelectorAll('.gesture-area').forEach(gestureArea => {
-  // Initialize all scale elements
-  const elements = Array.from(gestureArea.querySelectorAll('.scale-element'));
+document.querySelectorAll('.gesture-area').forEach((gestureArea) => {
+  const scaleElement = gestureArea.querySelector('.scale-element');
+  const transformState = {
+      angle: 0,
+      scale: 1,
+      x: 0,
+      y: 0
+  };
   
-  elements.forEach(element => {
-      // Get element dimensions for proper centering
-      const rect = element.getBoundingClientRect();
-      const width = rect.width;
-      const height = rect.height;
-      
-      const state = {
-          x: 0,
-          y: 0,
-          angle: 0,
-          scale: 1,
-          startX: 0,
-          startY: 0,
-          startAngle: 0,
-          startScale: 1
-      };
+  const currentGesture = {
+      startAngle: 0,
+      startScale: 1,
+      startX: 0,
+      startY: 0
+  };
 
-      // Set transform origin to center
-      element.style.transformOrigin = 'center center';
-      
-      // Apply initial transform
-      updateTransform();
+  function applyTransform() {
+      scaleElement.style.transform = `
+          translate(${transformState.x}px, ${transformState.y}px)
+          rotate(${transformState.angle}deg)
+          scale(${transformState.scale})
+      `;
+  }
 
-      // Make element draggable
-      interact(element).draggable({
+  interact(gestureArea)
+      .gesturable({
           listeners: {
               start(event) {
-                  state.startX = state.x;
-                  state.startY = state.y;
+                  currentGesture.startAngle = event.angle;
+                  currentGesture.startScale = event.scale;
               },
               move(event) {
-                  state.x = state.startX + event.dx;
-                  state.y = state.startY + event.dy;
-                  updateTransform();
+                  const angleDiff = event.angle - currentGesture.startAngle;
+                  const scaleDiff = event.scale / currentGesture.startScale;
+                  
+                  transformState.angle += angleDiff;
+                  transformState.scale *= scaleDiff;
+                  
+                  applyTransform();
+                  currentGesture.startAngle = event.angle;
+                  currentGesture.startScale = event.scale;
+              }
+          }
+      })
+      .draggable({
+          listeners: {
+              start(event) {
+                  currentGesture.startX = transformState.x;
+                  currentGesture.startY = transformState.y;
+              },
+              move(event) {
+                  transformState.x = currentGesture.startX + event.dx;
+                  transformState.y = currentGesture.startY + event.dy;
+                  applyTransform();
               }
           }
       });
 
-      // Make element gesturable (scale/rotate)
-      interact(element).gesturable({
-          listeners: {
-              start(event) {
-                  state.startAngle = state.angle;
-                  state.startScale = state.scale;
-              },
-              move(event) {
-                  // Calculate new scale with center origin
-                  const newScale = state.startScale * event.scale;
-                  
-                  // Calculate position adjustment to maintain center scaling
-                  const scaleRatio = (newScale - state.scale) / state.scale;
-                  const offsetX = (width / 2) * scaleRatio;
-                  const offsetY = (height / 2) * scaleRatio;
-                  
-                  // Update state
-                  state.x -= offsetX;
-                  state.y -= offsetY;
-                  state.angle = state.startAngle + event.da;
-                  state.scale = newScale;
-                  
-                  updateTransform();
-              }
-          }
-      });
-
-      function updateTransform() {
-          element.style.transform = `
-              translate(${state.x}px, ${state.y}px)
-              rotate(${state.angle}deg)
-              scale(${state.scale})
-          `;
-      }
-  });
+  applyTransform(); // Inicializa a transformação
 });
