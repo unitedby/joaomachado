@@ -1,0 +1,67 @@
+:root {
+    --bg-color: #F4F4F4;
+    --black: #000000;
+
+    --marginDesktop: 32px;
+}
+
+body {
+    background-color: var(--bg-color);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+
+.poster-container{
+    height:100vh;
+    width:100%;
+    position: relative;
+}
+
+.poster{
+    position: absolute;
+    height:100%;
+    width:100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.poster svg{
+    height:90%;
+}
+
+.draggable{
+    box-shadow: 0 10px 15px rgba(255, 255, 255, 0.3);
+    transition: box-shadow 0.5s ease;
+}
+
+.draggable:hover{
+    box-shadow: 0 10px 15px rgba(255, 255, 255, 0.7);
+}
+
+
+#rotate-area {
+    height: 100%;
+    padding: 1rem;
+    overflow: hidden;
+    touch-action: none;
+  }
+  
+  #arrow {
+    display: block;
+    margin: auto;
+    width: 100%;
+    height: 100%;
+  }
+  
+  #angle-info {
+    color: #666;
+    font-size: 2em;
+    position: absolute;
+    left: 1rem;
+    top: 1rem;
+  }
