@@ -1,42 +1,63 @@
-var angleScale = {
+var transformState = {
   angle: 0,
-  scale: 1
+  scale: 1,
+  x: 0,
+  y: 0
 };
+
 var gestureArea = document.getElementById('gesture-area');
 var scaleElement = document.getElementById('scale-element');
 var currentGesture = {
   startAngle: 0,
-  startScale: 1
+  startScale: 1,
+  startX: 0,
+  startY: 0
 };
+
+function applyTransform() {
+  scaleElement.style.transform = `
+    translate(${transformState.x}px, ${transformState.y}px)
+    rotate(${transformState.angle}deg)
+    scale(${transformState.scale})
+  `;
+}
 
 interact(gestureArea)
   .gesturable({
     listeners: {
       start(event) {
-        // Store the initial values at gesture start
         currentGesture.startAngle = event.angle;
         currentGesture.startScale = event.scale;
       },
       move(event) {
-        // Calculate the difference from the start of the gesture
         var angleDiff = event.angle - currentGesture.startAngle;
         var scaleDiff = event.scale / currentGesture.startScale;
         
-        // Apply the difference to the stored values
-        var currentAngle = angleScale.angle + angleDiff;
-        var currentScale = angleScale.scale * scaleDiff;
-
-        scaleElement.style.transform =
-          'rotate(' + currentAngle + 'deg)' + 
-          'scale(' + currentScale + ')';
+        transformState.angle = angleDiff + transformState.angle;
+        transformState.scale = scaleDiff * transformState.scale;
+        
+        applyTransform();
+        currentGesture.startAngle = event.angle;
+        currentGesture.startScale = event.scale;
       },
       end(event) {
-        // Update the persistent values with the total change
-        angleScale.angle += event.angle - currentGesture.startAngle;
-        angleScale.scale *= event.scale / currentGesture.startScale;
+        // Values are already updated in move()
       }
     }
   })
   .draggable({
-    listeners: { move: dragMoveListener }
+    listeners: { 
+      start(event) {
+        currentGesture.startX = transformState.x;
+        currentGesture.startY = transformState.y;
+      },
+      move(event) {
+        transformState.x = currentGesture.startX + event.dx;
+        transformState.y = currentGesture.startY + event.dy;
+        applyTransform();
+      }
+    }
   });
+
+// Initialize
+applyTransform();
