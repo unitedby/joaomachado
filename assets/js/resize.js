@@ -1,5 +1,4 @@
 document.querySelectorAll('.gesture-area').forEach(gestureArea => {
-  // Initialize all scale elements
   const elements = Array.from(gestureArea.querySelectorAll('.scale-element'));
   
   elements.forEach(element => {
@@ -14,10 +13,8 @@ document.querySelectorAll('.gesture-area').forEach(gestureArea => {
           startScale: 1
       };
 
-      // Apply initial transform
       updateTransform();
 
-      // Make element draggable
       interact(element).draggable({
           listeners: {
               start(event) {
@@ -32,7 +29,6 @@ document.querySelectorAll('.gesture-area').forEach(gestureArea => {
           }
       });
 
-      // Make element gesturable (scale/rotate)
       interact(element).gesturable({
           listeners: {
               start(event) {
