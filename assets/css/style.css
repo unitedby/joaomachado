@@ -14,18 +14,18 @@ body {
     padding: 0;
 }
 
-#scale-element {
+.scale-element {
   display: block;
   max-width: 100%;
   margin: 1rem auto;
   touch-action: none;
 }
 
-#gesture-area img{
+.gesture-area img{
     height:50vh;
   }
 
-#scale-element.reset {
+.scale-element.reset {
   transition: transform 0.3s ease-in-out;
 }
 

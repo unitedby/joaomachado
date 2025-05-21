@@ -45,3 +45,4 @@ var angleScale = {
     angleScale.angle = 0
     angleScale.scale = 1
   }
+  
