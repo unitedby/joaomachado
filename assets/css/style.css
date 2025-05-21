@@ -14,15 +14,31 @@ body {
     padding: 0;
 }
 
-.scale-element {
-  display: block;
-  max-width: 100%;
-  margin: 1rem auto;
-  touch-action: none;
+
+.poster-container{
+    height:100vh;
+    width:100%;
+    position: relative;
 }
 
-.gesture-area img{
-    height:50vh;
-  }
+.poster{
+    position: absolute;
+    height:100%;
+    width:100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.poster svg{
+    height:90%;
+}
 
 
+
+.scale-element {
+    display: block;
+    max-width: 100%;
+    margin: 1rem auto;
+    touch-action: none;
+}

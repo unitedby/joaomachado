@@ -1,67 +1,60 @@
-document.querySelectorAll('.gesture-area').forEach(gestureArea => {
-    const elements = Array.from(gestureArea.querySelectorAll('.scale-element'));
+document.querySelectorAll('.gesture-area').forEach((gestureArea) => {
+    const scaleElement = gestureArea.querySelector('.scale-element');
+    const transformState = {
+        angle: 0,
+        scale: 1,
+        x: 0,
+        y: 0
+    };
     
-    elements.forEach(element => {
-        const state = {
-            x: 0,
-            y: 0,
-            angle: 0,
-            scale: 1,
-            startX: 0,
-            startY: 0,
-            startAngle: 0,
-            startScale: 1,
-            isGesturing: false
-        };
+    const currentGesture = {
+        startAngle: 0,
+        startScale: 1,
+        startX: 0,
+        startY: 0
+    };
   
-        updateTransform();
+    function applyTransform() {
+        scaleElement.style.transform = `
+            translate(${transformState.x}px, ${transformState.y}px)
+            rotate(${transformState.angle}deg)
+            scale(${transformState.scale})
+        `;
+    }
   
-        interact(element).draggable({
+    interact(gestureArea)
+        .gesturable({
             listeners: {
                 start(event) {
-                    // Don't drag if we're in the middle of a gesture
-                    if (state.isGesturing) {
-                        event.stopImmediatePropagation();
-                        return;
-                    }
-                    state.startX = state.x;
-                    state.startY = state.y;
+                    currentGesture.startAngle = event.angle;
+                    currentGesture.startScale = event.scale;
                 },
                 move(event) {
-                    if (state.isGesturing) return;
-                    state.x = state.startX + event.dx;
-                    state.y = state.startY + event.dy;
-                    updateTransform();
+                    const angleDiff = event.angle - currentGesture.startAngle;
+                    const scaleDiff = event.scale / currentGesture.startScale;
+                    
+                    transformState.angle += angleDiff;
+                    transformState.scale *= scaleDiff;
+                    
+                    applyTransform();
+                    currentGesture.startAngle = event.angle;
+                    currentGesture.startScale = event.scale;
+                }
+            }
+        })
+        .draggable({
+            listeners: {
+                start(event) {
+                    currentGesture.startX = transformState.x;
+                    currentGesture.startY = transformState.y;
+                },
+                move(event) {
+                    transformState.x = currentGesture.startX + event.dx;
+                    transformState.y = currentGesture.startY + event.dy;
+                    applyTransform();
                 }
             }
         });
   
-        interact(element).gesturable({
-            listeners: {
-                start(event) {
-                    state.isGesturing = true;
-                    state.startAngle = state.angle;
-                    state.startScale = state.scale;
-                },
-                move(event) {
-                    state.angle = state.startAngle + event.da;
-                    state.scale = Math.max(0.1, Math.min(state.startScale * event.scale, 10)); // Limit scale
-                    updateTransform();
-                },
-                end(event) {
-                    state.isGesturing = false;
-                }
-            }
-        });
-  
-        function updateTransform() {
-            element.style.transform = `
-                translate(${state.x}px, ${state.y}px)
-                rotate(${state.angle}deg)
-                scale(${state.scale})
-            `;
-            // Improve performance on mobile
-            element.style.willChange = 'transform';
-        }
-    });
+    applyTransform(); // Inicializa a transformação
   });
