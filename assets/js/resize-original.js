@@ -1,70 +1,54 @@
-document.querySelectorAll('.gesture-area').forEach((gestureArea) => {
-    const scaleElement = gestureArea.querySelector('.scale-element');
-    const transformState = {
-        angle: 0,
-        scale: 1,
-        x: 0,
-        y: 0
+document.addEventListener('DOMContentLoaded', function() {
+    var angleScale = {
+      angle: 0,
+      scale: 1
     };
     
-    const currentGesture = {
-        startAngle: 0,
-        startScale: 1,
-        startX: 0,
-        startY: 0
-    };
-  
-    function applyTransform() {
-        scaleElement.style.transform = `
-            translate(${transformState.x}px, ${transformState.y}px)
-            rotate(${transformState.angle}deg)
-            scale(${transformState.scale})
-        `;
+    var gestureArea = document.getElementById('gesture-area');
+    var scaleElement = document.getElementById('scale-element');
+    
+    function dragMoveListener(event) {
+      var target = event.target;
+      var x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx;
+      var y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
+      
+      // Get current transform without translation
+      var transform = target.style.transform.replace(/translate\(.*?\)/, '');
+      
+      target.style.transform = 
+        transform + 
+        ' translate(' + x + 'px, ' + y + 'px)';
+      
+      target.setAttribute('data-x', x);
+      target.setAttribute('data-y', y);
     }
-  
-    // Gesture handling for pinch-to-zoom and rotation
+    
     interact(gestureArea)
-        .gesturable({
-            listeners: {
-                start(event) {
-                    currentGesture.startAngle = event.angle;
-                    currentGesture.startScale = event.scale;
-                },
-                move(event) {
-                    const angleDiff = event.angle - currentGesture.startAngle;
-                    const scaleDiff = event.scale / currentGesture.startScale;
-                    
-                    transformState.angle += angleDiff;
-                    transformState.scale *= scaleDiff;
-                    
-                    applyTransform();
-                    currentGesture.startAngle = event.angle;
-                    currentGesture.startScale = event.scale;
-                }
-            }
-        })
-        .draggable({
-            inertia: true,
-            modifiers: [
-                interact.modifiers.restrictRect({
-                    restriction: 'parent',
-                    endOnly: true
-                })
-            ],
-            autoScroll: true,
-            listeners: {
-                start(event) {
-                    currentGesture.startX = transformState.x;
-                    currentGesture.startY = transformState.y;
-                },
-                move(event) {
-                    transformState.x = currentGesture.startX + event.dx;
-                    transformState.y = currentGesture.startY + event.dy;
-                    applyTransform();
-                }
-                // Removed the end event listener that displayed text
-            }
-        });
-  
-    applyTransform(); // Initialize the transformation
-});
+      .gesturable({
+        listeners: {
+          start(event) {
+            angleScale.angle -= event.angle;
+          },
+          move(event) {
+            var currentAngle = event.angle + angleScale.angle;
+            var currentScale = event.scale * angleScale.scale;
+            var x = (parseFloat(scaleElement.getAttribute('data-x')) || 0);
+            var y = (parseFloat(scaleElement.getAttribute('data-y')) || 0);
+            
+            scaleElement.style.transform =
+              'translate(' + x + 'px, ' + y + 'px) ' +
+              'rotate(' + currentAngle + 'deg) ' + 
+              'scale(' + currentScale + ')';
+          },
+          end(event) {
+            angleScale.angle += event.angle;
+            angleScale.scale *= event.scale;
+          }
+        }
+      })
+      .draggable({
+        listeners: { 
+          move: dragMoveListener 
+        }
+      });
+  });

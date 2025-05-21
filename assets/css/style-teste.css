@@ -1,6 +1,5 @@
 #scale-element {
     display: block;
-    max-width: 100%;
-    
     touch-action: none;
-  }
+    height: 80vh!important;
+}
