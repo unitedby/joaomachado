@@ -1,9 +1,10 @@
+// Drag+Resize+Rotation
 var angleScale = {
     angle: 0,
     scale: 1
   };
   
-  // Select elements by class
+
   var gestureAreas = document.querySelectorAll('.gesture-area');
   var scaleElements = document.querySelectorAll('.scale-element');
   
@@ -12,7 +13,6 @@ var angleScale = {
     var x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx;
     var y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
     
-    // Get current transform without translation
     var transform = target.style.transform.replace(/translate\(.*?\)/, '');
     
     target.style.transform = 
@@ -23,7 +23,6 @@ var angleScale = {
     target.setAttribute('data-y', y);
   }
   
-  // Apply to all elements with the class
   gestureAreas.forEach(function(gestureArea) {
     interact(gestureArea)
       .gesturable({
@@ -32,7 +31,6 @@ var angleScale = {
             angleScale.angle -= event.angle;
           },
           move(event) {
-            // Find the corresponding scale element
             var scaleElement = gestureArea.querySelector('.scale-element');
             
             var currentAngle = event.angle + angleScale.angle;
