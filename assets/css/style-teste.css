@@ -1,4 +1,4 @@
-#scale-element {
+.scale-element {
     display: block;
     touch-action: none;
     height: 80vh!important;

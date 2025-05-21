@@ -1,28 +1,30 @@
-document.addEventListener('DOMContentLoaded', function() {
-    var angleScale = {
-      angle: 0,
-      scale: 1
-    };
+var angleScale = {
+    angle: 0,
+    scale: 1
+  };
+  
+  // Select elements by class
+  var gestureAreas = document.querySelectorAll('.gesture-area');
+  var scaleElements = document.querySelectorAll('.scale-element');
+  
+  function dragMoveListener(event) {
+    var target = event.target;
+    var x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx;
+    var y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
     
-    var gestureArea = document.getElementById('gesture-area');
-    var scaleElement = document.getElementById('scale-element');
+    // Get current transform without translation
+    var transform = target.style.transform.replace(/translate\(.*?\)/, '');
     
-    function dragMoveListener(event) {
-      var target = event.target;
-      var x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx;
-      var y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
-      
-      // Get current transform without translation
-      var transform = target.style.transform.replace(/translate\(.*?\)/, '');
-      
-      target.style.transform = 
-        transform + 
-        ' translate(' + x + 'px, ' + y + 'px)';
-      
-      target.setAttribute('data-x', x);
-      target.setAttribute('data-y', y);
-    }
+    target.style.transform = 
+      transform + 
+      ' translate(' + x + 'px, ' + y + 'px)';
     
+    target.setAttribute('data-x', x);
+    target.setAttribute('data-y', y);
+  }
+  
+  // Apply to all elements with the class
+  gestureAreas.forEach(function(gestureArea) {
     interact(gestureArea)
       .gesturable({
         listeners: {
@@ -30,6 +32,9 @@ document.addEventListener('DOMContentLoaded', function() {
             angleScale.angle -= event.angle;
           },
           move(event) {
+            // Find the corresponding scale element
+            var scaleElement = gestureArea.querySelector('.scale-element');
+            
             var currentAngle = event.angle + angleScale.angle;
             var currentScale = event.scale * angleScale.scale;
             var x = (parseFloat(scaleElement.getAttribute('data-x')) || 0);
